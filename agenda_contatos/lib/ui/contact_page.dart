@@ -75,13 +75,14 @@ class _ContactPageState extends State<ContactPage> {
                   ),
                 ),
                 onTap: () {
-                  ImagePicker.pickImage(source: ImageSource.gallery)
-                      .then((file) {
-                    if (file == null) return;
-                    setState(() {
-                      _editContact.img = file.path;
-                    });
-                  });
+                  _showOptionsImage(context);
+                  // ImagePicker.pickImage(source: ImageSource.gallery)
+                  //     .then((file) {
+                  //   if (file == null) return;
+                  //   setState(() {
+                  //     _editContact.img = file.path;
+                  //   });
+                  // });
                 },
               ),
               TextField(
@@ -156,5 +157,59 @@ class _ContactPageState extends State<ContactPage> {
     } else {
       return Future.value(true);
     }
+  }
+
+  void _showOptionsImage(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 5),
+                  child: FlatButton(
+                    child: Text(
+                      "Camera",
+                      style: TextStyle(fontSize: 20.0, color: Colors.blue),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ImagePicker.pickImage(source: ImageSource.camera)
+                          .then((file) {
+                        if (file == null) return;
+                        setState(() {
+                          _userEdited = true;
+                          _editContact.img = file.path;
+                        });
+                      });
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 10, top: 5.0),
+                  child: FlatButton(
+                    child: Text(
+                      "Galeria",
+                      style: TextStyle(fontSize: 20.0, color: Colors.blue),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      ImagePicker.pickImage(source: ImageSource.gallery)
+                          .then((file) {
+                        if (file == null) return;
+                        setState(() {
+                          _userEdited = true;
+                          _editContact.img = file.path;
+                        });
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }
